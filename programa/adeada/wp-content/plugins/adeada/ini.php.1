@@ -1,0 +1,192 @@
+<?php
+/*
+Plugin Name: plugin_adeada
+Plugin URI: http://www.orbere.com
+Description: comentario
+Author: Alberto Valdeolmillos
+Version: 1.0
+Author URI: http://www.orbere.com
+*/
+
+function adeada_saludo() {
+	echo "Hola buenas_ 44445";
+}
+
+function adeada_instala(){
+	//include('_instalarRoles.php');
+	global $wpdb;
+	$sql = "alter table wp_users ENGINE=innoDB;";
+	$wpdb->query($sql);	
+	$sql = "
+CREATE TABLE IF NOT EXISTS `adeada_encuestas` (
+  `id_encuesta` mediumint(8) unsigned NOT NULL auto_increment,
+  `id_usuario` mediumint(8) unsigned NOT NULL,
+  `concepto` enum('0','1') NOT NULL default '0',
+  `estado` enum('0','1','2') NOT NULL default '0',
+  `fec_alta` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `fec_mod` timestamp,
+  PRIMARY KEY  (`id_encuesta`),
+  KEY `id_usuario` (`id_usuario`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ";
+	$wpdb->query($sql);	
+	$sql = "
+ALTER TABLE `adeada_encuestas`
+  ADD CONSTRAINT `adeada_encuestas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `wp_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ";
+	$wpdb->query($sql);	
+	$sql = "  
+CREATE TABLE IF NOT EXISTS `adeada_areas` (
+  `id_area` mediumint(8) unsigned NOT NULL auto_increment,
+  `nombre` varchar(40) default NULL,
+  `concepto` enum('0','1') NOT NULL default '0',
+  `orden` mediumint(8) unsigned default '0',  
+  `descripcion` text,
+  PRIMARY KEY  (`id_area`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ";
+	$wpdb->query($sql);	
+	
+	$sql = " 	
+INSERT INTO `adeada_areas` (`id_area`, `nombre`, `concepto`, `orden`, `descripcion`) VALUES
+(1, 'estrategia_fase1', '0', 0, 'area de estrategia'),
+(2, 'estrategia_fase2', '0', 0, 'area de estrategia'),
+(3, 'personas_fase1', '0', 0, 'area de personas'),
+(4, 'personas_fase2', '0', 0, 'area de personas'),
+(5, 'recursos_fase1', '0', 0, 'area de recursos'),
+(6, 'recursos_fase2', '0', 0, 'area de recursos'),
+(7, 'procesos_fase1', '0', 0, 'area de procesos'),
+(8, 'procesos_fase2', '0', 0, 'area de procesos'),
+(9, 'resultados', '0', 0, 'area de resultados');
+    ";
+	$wpdb->query($sql);	
+	
+	$sql = "
+CREATE TABLE IF NOT EXISTS `adeada_preguntas` (
+  `id_pregunta` mediumint(8) unsigned NOT NULL auto_increment,
+  `id_area` mediumint(8) unsigned NOT NULL,
+  `id_indicador` mediumint(8) unsigned default 0,
+  `indicador` enum('global','area','pregunta') default NULL,
+  `tipo` varchar(40) default NULL,
+  `pregunta` text,
+  `descripcion` text,
+  `opciones` enum('sino_2/6','sino_2/10','porcent','0_10') default NULL,
+  `respuestaalfallo` text,
+  PRIMARY KEY  (`id_pregunta`),
+  KEY `id_area` (`id_area`),
+  KEY `id_indicador` (`id_indicador`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ";
+	$wpdb->query($sql);	
+	$sql = "
+ALTER TABLE `adeada_preguntas`
+  ADD CONSTRAINT `adeada_preguntas_ibfk_1` FOREIGN KEY (`id_area`) REFERENCES `adeada_areas` (`id_area`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `adeada_preguntas_ibfk_2` FOREIGN KEY (`id_indicador`) REFERENCES `adeada_preguntas` (`id_pregunta`) ON DELETE CASCADE ON UPDATE CASCADE;  
+    ";
+	
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 1, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene identificados los grupos de interés de su empresa?'), 'descripcion' => utf8_encode('Se entiende por grupos de interés todas aquellas personas y entidades vinculadas a la empresa o que influyen en ella, como pueden ser los clientes, los empleados, los proveedores, la competencia, etcétera.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 01' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );		
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 1, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha definido la misión de su empresa?'), 'descripcion' => utf8_encode('Define el negocio al que se dedica la organización, las necesidades que cubren con sus productos y servicios, el mercado en el cual se desarrolla la empresa y la imagen pública de la empresa u organización. La misión de la empresa es la respuesta a la pregunta: ¿Para qué existe la empresa?'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 02' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 1, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Y la visión a medio y largo plazo?'), 'descripcion' => utf8_encode('Define y describe la situación futura que desea tener la empresa. El propósito de la visión es guiar, controlar y alentar a la empresa en su conjunto para alcanzar el estado deseable a medio y largo plazo. Responde a la pregunta: ¿Cómo queremos que sea la empresa en los próximos años?'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 03' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 1, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha identificado los valores que identifican a su empresa?'), 'descripcion' => utf8_encode('Definen el conjunto de principios, creencias, reglas que regulan la gestión de la empresa.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 04' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 1, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha realizado el análisis de fortalezas, debilidades, oportunidades y amenazas?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 05' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 2, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Conoce las expectativas de tienen los grupos de interés de su empresa?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 06' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 2, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Analiza el comportamiento de la competencia?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 07' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 2, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene definidas sus líneas estratégicas?'), 'descripcion' => utf8_encode('Principales líneas de actuación que surgen tras el análisis de fortalezas, debilidades, amenazas y oportunidades. Deben tener objetivos identificados.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 08' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 2, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Sus líneas estratégicas se desarrollan en Planes Operativos con objetivos anuales?'), 'descripcion' => utf8_encode('Concretan las acciones precisas para desarrollar las líneas estratégicas de la empresa. Deben tener objetivos anuales concretos'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 09' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 2, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Realiza habitualmente acciones de búsqueda de nuevos mercados?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 10' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 3, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Conoce cuáles son las necesidades de personal a lo largo de todo el año?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 11' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 3, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene realizada una descripción de puestos de trabajo en la que se indiquen funciones y responsabilidades de cada uno?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 12' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 3, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha elaborado un procedimiento sistemático para la selección del personal?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 13' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 3, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene establecido un Plan de Acogida para integrar al nuevo personal?'), 'descripcion' => utf8_encode('Documento donde se recoge lo que es la empresa, su actividad, su planteamiento estratégico, su organigrama y demás información que sirve para que un nuevo empleado conozca cómo funciona la empresa y pueda integrarse con facilidad.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 14' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 3, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de Planes de Seguridad y Salud Laboral?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 15' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 4, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene definido un Plan de Formación basado en una previa detección de necesidades?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 16' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 4, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Se ha establecido un método de evaluación del desempeño del personal?'), 'descripcion' => utf8_encode('Mecanismos y técnicas que sirven para medir si el trabajo de una persona en su puesto de trabajo es mediocre, regular o excelente.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 17' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 4, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Hay medidas definidas para el reconocimiento y la promoción de las personas?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 18' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 4, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Se mide de forma sistemática y periódica la satisfacción del personal?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 19' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 4, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha establecido medidas de conciliación de la vida laboral y familiar?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 20' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 5, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de un Cuadro de Previsión de Tesorería mes a mes?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 21' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 5, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Utiliza indicadores para conocer la salud financiera de su negocio?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 22' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 5, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de un sistema para evaluar la productividad de las inversiones?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 23' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 5, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Controla el resultado económico que le producen sus proveedores?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 24' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 5, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de un procedimiento de compras?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 25' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 6, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Conoce los stocks máximos y mínimos que debe tener almacenados?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 26' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 6, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de un sistema informático que le permite tener información suficiente para tomar decisiones de gestión?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 27' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 6, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene establecido un sistema de amortización de sus equipos?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 28' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 6, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Es capaz de mantener el taller limpio, bien equipado y en orden?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 29' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 6, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Realiza gestión mediambiental de sus resíduos?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 30' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 7, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Dispone de un Mapa de Procesos?'), 'descripcion' => utf8_encode('Es un gráfico donde se recogen los procesos que se dan en la empresa y las interrelaciones entre ellos.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 31' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 7, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Están establecidos los canales de comunicación dentro de la empresa?'), 'descripcion' => utf8_encode('Quién debe informar de qué a quién dentro de la empresa para que se lleven a cabo los procesos de forma efectiva.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 32' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 7, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene bases de datos de sus clientes actuales y potenciales?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 33' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 7, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Cumple los preceptos de la Ley Orgánica de Protección de Datos (LOPD)?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 34' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 7, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene elaborado un Plan de Comunicación?'), 'descripcion' => utf8_encode('Documento donde se recogen las inversiones que se van a realizar a lo largo del año en publicidad y comunicación con el cliente en los diversos medios posibles.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 35' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 8, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Diseña nuevos servicios para sus clientes?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 36' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 8, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene establecido un protocolo de atención al cliente?'), 'descripcion' => utf8_encode('Procedimiento diseñado para saber cómo actuar en la mayor parte de los casos posibles de relación con el cliente, buscando siempre su máxima satisfacción.'),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 37' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 8, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Informa al cliente de las condiciones de contratación: horarios, precios, medios de pago, garantías…?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 38' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 8, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Tiene una encuesta de satisfacción del cliente y analiza sus respuestas?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 39' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 8, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ofrece un servicio post-venta?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 40' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 9, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha obtenido resultados satisfactorios en los indicadores de gestión del negocio en los últimos tres años?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 41' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 9, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha obtenido resultados satisfactorios en los indicadores de satisfacción de sus clientes en los últimos tres años?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 42' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );
+	$wpdb->insert( 'adeada_preguntas', array( 'id_area' => 9, 'id_indicador' => 0, 'indicador' => NULL, 'tipo' => NULL, 'pregunta' => utf8_encode('¿Ha obtenido resultados satisfactorios en los indicadores de satisfacción de sus empleados en los últimos tres años?'), 'descripcion' => utf8_encode(' '),'opciones' => '0_10','respuestaalfallo' => 'respuesta a la preg 43' ), array( '%d', '%d', '%s','%s','%s', '%s', '%s', '%s' ) );	
+
+	$wpdb->query($sql);	
+	$sql = "  
+CREATE TABLE IF NOT EXISTS `adeada_respuestas` (
+  `id_respuesta` mediumint(8) unsigned NOT NULL auto_increment,
+  `id_pregunta` mediumint(8) unsigned NOT NULL,
+  `id_encuesta` mediumint(8) unsigned NOT NULL,
+  `fec_mod` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `puntos` mediumint(8) unsigned DEFAULT NULL,
+  `respuesta` varchar(40) default NULL,
+  PRIMARY KEY  (`id_respuesta`),
+  KEY `id_pregunta` (`id_pregunta`),
+  KEY `id_encuesta` (`id_encuesta`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ";
+	$wpdb->query($sql);	
+	$sql = "
+ALTER TABLE `adeada_respuestas`
+  ADD CONSTRAINT `adeada_respuestas_ibfk_1` FOREIGN KEY (`id_pregunta`) REFERENCES `adeada_preguntas` (`id_pregunta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `adeada_respuestas_ibfk_2` FOREIGN KEY (`id_encuesta`) REFERENCES `adeada_encuestas` (`id_encuesta`) ON DELETE CASCADE ON UPDATE CASCADE;  
+    ";
+	$wpdb->query($sql);	
+}
+
+function adeada_desinstala(){
+	//include('_desinstalarRoles.php');
+	global $wpdb;
+	$sql = "alter table wp_users ENGINE=myISAM;";
+	$wpdb->query($sql);		
+	$sql = "DROP TABLE `adeada_respuestas`";
+	$wpdb->query($sql);		
+	$sql = "DROP TABLE `adeada_preguntas`";
+	$wpdb->query($sql);	
+	$sql = "DROP TABLE `adeada_encuestas`";
+	$wpdb->query($sql);	
+	$sql = "DROP TABLE `adeada_areas`";
+	$wpdb->query($sql);		
+}
+
+function adeada_panel(){
+	echo "<h1>---eo</h1>";
+}
+
+function adeada_add_menu(){
+	if (function_exists('add_options_page')){
+		add_options_page('adeada','adeada',8,basename(__FILE__),'adeada_panel');
+	}
+}
+
+if (function_exists('add_action')){
+	add_action('admin_menu','adeada_add_menu');
+}
+
+add_action( 'admin_notices', 'adeada_saludo' );
+
+add_action('activate_adeada/ini.php','adeada_instala');
+add_action('deactivate_adeada/ini.php','adeada_desinstala');
+
+?>

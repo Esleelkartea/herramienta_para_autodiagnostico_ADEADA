@@ -1,0 +1,274 @@
+/*
+Theme Name: adeada theme
+Theme URI: http://wordpress.org/
+Description: prueba
+Author: Alberto Valdeolmillos
+Version: 1.0
+License: GNU General Public License
+License URI: license.txt
+Tags: 
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	background: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+
+}
+
+body{
+	padding:0 20px;
+	background:#d0d0d8;
+}
+
+#wrapper{
+
+}
+#wrapper a{
+	color:#444499;
+	text-decoration: none;	
+}
+#wrapper #header{
+	background:#f0f0f8 url(images/logoAdeada2.png) no-repeat right bottom;	
+	height:100px;
+	border-bottom:solid 1px #999;
+}
+#wrapper #main{
+	background:#fff;
+	padding:5px 5px;
+}
+#wrapper #footer{
+	background:#f0f0f8;
+	border-top:solid 1px #999;
+	text-align:center;
+	font-size:0.7em;
+	padding:5px 0;
+}
+#wrapper #header #masthead{
+}
+#wrapper #header #masthead #branding{
+}
+#wrapper #header #masthead #branding #blog-title{
+
+	padding-top:10px;
+	padding-left:100px;
+}
+#wrapper #header #masthead #branding #blog-title a{
+	color:#117;
+	font-family:Verdana;
+	font-size:1.4em;
+	font-weight:bold;
+	font-style:italic;
+}
+#wrapper #header #masthead #branding #blog-description{
+	font-size:0.9em;
+}
+#wrapper #header #masthead #access{
+
+	display: block;
+	float: left;
+	width: 540px;	
+	margin-top:30px;
+	margin-left:20px;
+}
+#wrapper #header #masthead #access .skip-link{
+	float: right;
+}
+#wrapper #header #masthead #access .skip-link a{
+
+}
+#wrapper #header #masthead #access #nav{
+
+}
+#wrapper #header #masthead #access #nav ul{
+	list-style:none;
+	margin:0;
+}
+#wrapper #header #masthead #access #nav ul li{
+	list-style:none;
+	display:inline;
+	float: left;
+	position: relative;
+	margin:0;
+}
+#wrapper #header #masthead #access #nav ul li a{
+	display: block;
+	/*line-height: 28px;*/
+	padding: 3px 5px;
+	margin: 0 5px;
+
+	border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;			
+	background: #ccc url(../../plugins/adeada/test/images/h100.png);
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;		
+}
+#wrapper #header #masthead #access #nav ul li a:hover{
+	color:#99CC00;
+	background: #003366 url(../../plugins/adeada/test/images/h100.png);
+}
+#wrapper #header #masthead #access #nav ul li .activo a{
+	color:#99CC00;
+	background: #003366 url(../../plugins/adeada/test/images/h100.png);
+}
+#wrapper #header #primary {
+}
+#wrapper #header #primary  .cerrar{
+	text-align:right;
+	padding-right:20px;
+	background: url(images/close2.png) no-repeat top right ;	
+}
+#wrapper #header #primary #capaLogin, #wrapper #header #primary #capaRegistro{
+	width:200px;
+	padding:20px;
+	position:absolute;
+	float:right;
+	right:50px;
+	top:50px;
+	border:solid 1px #555;
+	background:#efefef;
+	z-index:2;
+		/*opacity:0.9;*/
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	
+}
+ .black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index:1;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+#wrapper #header #capaCero #saludo{
+	display:inline;
+	text-align:left;	
+	padding-right:20px;
+}
+#wrapper #header #capaCero #wp-logout{
+	padding-left:30px;
+	background: url(images/close2.png) no-repeat 4px 4px;
+}
+#wrapper #header #capaCero #capaError{
+    background: #fff6bf url(../../plugins/adeada/test/images/exclamation.png) center no-repeat;
+    background-position: 15px 50%;
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;
+}
+#wrapper #header #capaCero  a{
+
+	border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;	
+	background: #ccc url(../../plugins/adeada/test/images/h100.png);	
+	padding:4px;
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;		
+}
+#wrapper #header #capaCero  a:hover{
+	color:#99CC00;
+	background: #003366 url(../../plugins/adeada/test/images/h100.png);
+}
+#wrapper #header #capaCero{
+	width:350px;
+
+	float:right;
+	right:0px;
+	text-align:right;
+}
+#wrapper #header #primary ul{
+	list-style:none;
+}
+#wrapper #header #secondary{
+	float: left;
+}
+#wrapper #main #container{
+
+}
+#wrapper #main #container #content{
+	height:460px;
+	/*overflow:auto;*/
+}
+
+#wrapper #main #container #content #formEnvio table .pregunta div{
+width: 300px;
+/*overflow: hidden;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis;
+white-space: nowrap;*/
+
+}
+#wrapper #main #container #content #formEnvio table{
+	height: 330px;
+}
+
+.tutorialElem{
+	width:210px;
+	display:table-cell;
+	border:solid 1px #ccc;
+	padding:20px;
+	margin:15px;
+	text-align:center;	
+	background: #f0f0f8;
+		-moz-border-radius:16px;
+		-webkit-border-radius:16px;
+
+
+}
+.tutorialElem img{
+	width:160px;
+	padding:20px 0;	
+}
+.tutorialElem .tutorialElemNum{
+	font-size:1.9em;
+	font-weight:bold;
+	border:solid 3px #FAB13F;
+	padding:0 10px;	
+		-moz-border-radius:26px;
+		-webkit-border-radius:26px;
+	
+}
+
+.tutorialElem  span{
+	color: #3B5F84;
+}
+
+h1{
+	color:#6666ff;
+	font-size:1.1em;
+	padding:0 10px;
+	margin:0;
+}
+hr {
+	color:#6666ff;
+	padding:0;
+	margin:0;	
+	margin-bottom:5px;
+}
+
+
+

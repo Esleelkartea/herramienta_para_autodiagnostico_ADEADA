@@ -1,0 +1,829 @@
+/*
+Theme Name: adeada theme
+Theme URI: http://wordpress.org/
+Description: prueba
+Author: Alberto Valdeolmillos
+Version: 1.0
+License: GNU General Public License
+License URI: license.txt
+Tags: 
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	background: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+
+}
+
+body{
+	padding:0 20px;
+	background:#d0d0d8;
+}
+
+#wrapper{
+
+}
+#wrapper a{
+	color:#444499;
+	text-decoration: none;	
+}
+#wrapper #header{
+	/*background:#f0f0f8 url(images/logoAdeada2.png) no-repeat right bottom;	*/
+	background:#708FA8 url(images/logoAdeada.jpg) no-repeat 5px 20px;
+	color:#fff;	
+	height:100px;
+	border-bottom:solid 1px #999;
+	font-family:Arial;
+	font-size:10pt;
+}
+#wrapper #main{
+	background:#fff;
+	padding:5px 5px;
+	color:#1A1A1A;
+	font-family:Arial;
+}
+#wrapper #main .pagNormal{
+	padding:5px 65px;
+}
+#wrapper #main .pagNormal p{
+	padding:5px 5px;
+}
+#wrapper #main .pagNormal a{
+	color:#0071BC;
+}
+#wrapper #main .pagNormal a:hover{
+	color:#708FA8;
+}
+#wrapper #footer{
+	background:#708FA8;
+	color:#fff;	
+	border-top:solid 1px #999;
+	text-align:center;
+	font-size:0.7em;
+	padding:5px 0;
+	font-family:Arial;
+	font-size:9pt;	
+}
+#wrapper #footer  a{
+	color:#ccc;
+}
+#wrapper #footer a:hover{
+	color:#0071BC;
+}
+
+#wrapper #header #masthead{
+}
+#wrapper #header #masthead #branding{
+}
+#wrapper #header #masthead #branding #blog-title{
+	/*background:url(images/logoGV.gif) no-repeat right bottom;*/
+	text-align:right;
+	padding-bottom:10px;
+	padding-top:10px;	
+	padding-right:60px;
+	font-size:12pt;
+}
+#wrapper #header #masthead #branding #blog-title a{
+	color:#eee;
+	font-weight:bold;
+	font-style:italic;
+
+}
+#wrapper #header #masthead #branding #blog-title a img{
+	height:55px;
+	vertical-align:middle;
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+}
+#wrapper #header #masthead #branding #blog-title span{
+	padding-right:80px;
+}
+#wrapper #header #masthead #branding #blog-description{
+	font-size:0.9em;
+}
+#wrapper #header #access{
+	border-top:solid 1px #3B4E60;
+	display: block;
+	float: right;
+	width: 450px;	
+
+}
+#wrapper #header #access .skip-link{
+	float: right;
+}
+#wrapper #header #access .skip-link a{
+
+}
+#wrapper #header #access #nav{
+
+}
+#wrapper #header  #access #nav ul{
+	list-style:none;
+	margin:0;
+}
+#wrapper #header #access #nav ul li{
+	list-style:none;
+	display:inline;
+	float: left;
+	position: relative;
+	margin:0;
+}
+#wrapper #header #access #nav ul li a{
+	display: block;
+	/*line-height: 28px;*/
+	padding: 3px 5px;
+	margin: 0 5px;
+	width:70px;
+	color:#fff;
+	text-align:center;
+	/*border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;			
+	background: #ccc url(../../plugins/adeada/test/images/h100.png);
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;*/		
+}
+#wrapper #header #access #nav ul li a:hover{
+	/*color:#99CCFF;*/
+	font-weight:bold;
+	/*background: #003366 url(../../plugins/adeada/test/images/h100.png);*/
+}
+#wrapper #header #access #nav ul li .activo a{
+	/*color:#99CCFF;*/
+	font-weight:bold;
+	/*background: #003366 url(../../plugins/adeada/test/images/h100.png);*/
+}
+#wrapper #header #primary {
+}
+#wrapper #header #primary  .cerrar{
+	text-align:right;
+	padding-right:20px;
+	background: url(images/close2.png) no-repeat top right ;	
+}
+#wrapper #header #primary #capaLogin, #wrapper #header #primary #capaRegistro{
+	color:#555;
+	width:200px;
+	padding:20px;
+	position:absolute;
+	float:right;
+	right:50px;
+	top:50px;
+	border:solid 1px #555;
+	background:#efefef;
+	z-index:2;
+		/*opacity:0.9;*/
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	
+}
+ .black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index:1;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+
+#wrapper  #capaError{
+    background: #fff6bf url(../../plugins/adeada/test/images/exclamation.png) center no-repeat;
+    background-position: 15px 50%;
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;
+}
+
+#wrapper #header #capaCero{
+	width:270px;
+	border-top:solid 1px #3B4E60;
+	float:right;
+	margin-right:50px;
+	text-align:right;
+}
+#wrapper #header #capaCero  a{
+
+	/*border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;	
+	background: #ccc url(../../plugins/adeada/test/images/h100.png);*/	
+	padding: 3px 5px;
+	margin: 0 5px;	
+	color:#fff;
+	text-align:center;	
+		/*-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	*/	
+}
+#wrapper #header #capaCero  a:hover{
+	/*color:#99CCFF;*/
+	font-weight:bold;
+	/*background: #003366 url(../../plugins/adeada/test/images/h100.png);*/
+}
+
+#wrapper #header #capaCero #saludo{
+	text-align:right;
+	float:right;
+}
+#wrapper #header #capaCero #saludo span{
+	display:table-cell;
+}
+#wrapper #header #capaCero #saludo #wp-logout{
+	width:90px;
+	display:table-cell;
+	/*padding-left:30px;
+	background: url(images/close2.png) no-repeat 4px 4px;*/
+}
+#wrapper #header #capaCero #logreg{
+	text-align:right;
+	float:right;
+}
+#wrapper #header #capaCero #logreg a{
+	display:table-cell;
+	width:55px;
+}
+
+#wrapper #header #primary ul{
+	list-style:none;
+}
+#wrapper #header #secondary{
+	float: left;
+}
+#wrapper #main #container{
+
+}
+#wrapper #main #container #content{
+	height:445px;
+	/*overflow:auto;*/
+}
+
+#wrapper #main #container #content #formEnvio table .pregunta div{
+width: 300px;
+/*overflow: hidden;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis;
+white-space: nowrap;*/
+
+}
+#wrapper #main #container #content #formEnvio table{
+	height: 320px;
+}
+
+.tutorialElem{
+	width:210px;
+	display:table-cell;
+	border:solid 1px #ccc;
+	padding:20px;
+	margin:15px;
+	text-align:center;	
+	background: #f0f0f8;
+		-moz-border-radius:16px;
+		-webkit-border-radius:16px;
+
+
+}
+.tutorialElem img{
+	width:160px;
+	padding:20px 0;	
+}
+.tutorialElem .tutorialElemNum{
+	font-size:1.9em;
+	font-weight:bold;
+	border:solid 3px #FAB13F;
+	padding:0 10px;	
+		-moz-border-radius:26px;
+		-webkit-border-radius:26px;
+	
+}
+
+.tutorialElem  span{
+	color: #3B5F84;
+}
+
+h1{
+	color:#0071BC;
+	font-size:1.1em;
+	padding-top:10px;
+	padding-left:10px;
+	margin:0;
+}
+hr {
+	padding:0;
+	margin:0;	
+	margin-bottom:5px;
+	border-bottom:solid 1px #0071BC;
+}
+
+.pagNormal  #diagnosticos{
+	height:400px;
+	overflow:auto;
+}
+.pagNormal  #diagnosticos #contenidoIntroduccionDiag,.pagNormal  #diagnosticos #contenidoDiagnosticosDiag,.pagNormal  #diagnosticos #contenidoIndicadoresDiag{
+	/*display:none;*/
+}
+
+.pagNormal  #diagnosticos h1 a{
+	float:right;
+}
+
+.pagNormal  #metodologia{
+	height:380px;
+	overflow:auto;
+}
+.pagNormal  #metodologia #capaEstrategia,.pagNormal  #metodologia #capaPersonas,.pagNormal  #metodologia #capaRecursos,.pagNormal  #metodologia #capaProcesos,.pagNormal  #metodologia #capaResultados{
+	display:none;
+}
+
+.pagNormal  #miniMenu{
+	margin:10px;
+}
+
+.pagNormal  #miniMenu li{
+	display:inline;
+	padding:0 10px;
+}
+
+#formIndicador h1{
+	text-align:center;
+}
+
+#formIndicador div{
+	text-align:right;
+	margin-bottom:5px;
+	display:inline;	
+}
+#formIndicador div input{
+
+}
+#formIndicador div div{
+	width:600px;
+	display:table-cell;
+}
+
+/*estilo*/
+.cabecera{
+  background: #feb; 
+  border: solid 1px #888;
+  margin-top:75px;
+  margin-bottom:5px;  
+}
+
+.cabecera h1{
+  padding:0px;
+  margin:0px;
+}
+
+.cabecera img{
+  vertical-align:middle;
+}
+
+#mensaje {
+    background: #fff6bf url(../../plugins/adeada/test/images/exclamation.png) center no-repeat;
+    background-position: 15px 50%;
+    text-align: left;
+    padding: 5px 20px 5px 45px;
+    border-top: 2px solid #ffd324;
+    border-bottom: 2px solid #ffd324;
+    display:none;
+    }
+
+input{
+  border: solid 1px #888;
+}
+
+.radiobutton{
+  text-align:center;
+}
+
+.radiobutton input{
+  border: 0;
+}
+
+.radiobuttoncontrol{
+  display:none;
+}
+
+.pagNormal table{
+  width:95%;
+  border-collapse: collapse;
+}
+
+.pagNormal table tr td, .pagNormal table tr th{
+  border:solid 1px #888;
+  background:#fff;
+  text-align:center;
+}
+
+.pagNormal table tr th{
+  background:#eee url(../../plugins/adeada/test/images/h100.png);
+  text-align:center;
+}
+
+#formEnvio table{  
+  border-collapse: collapse;
+  font-size:0.7em;
+}
+
+#formEnvio table tr td, #formEnvio table tr th{
+  border:solid 1px #888;
+  padding:2px;
+  background:#fff;  
+}
+
+#formEnvio table tr th{
+  background:#eee url(../../plugins/adeada/test/images/h100.png);
+  /*background:#9AD2EB;*/
+  text-align:center;
+  width:90px;
+  /*font-size:0.6em; */
+}
+
+.pregunta{
+  /*font-size:0.8em; */
+  width:300px;
+}
+
+#resultadoTabla table{
+  width:95%;
+}
+
+#resultadoTabla table td{
+  /*background:#fff url(../../plugins/adeada/test/images/h100.png);*/
+  background:#fff;
+  text-align:center;
+}
+
+#resultadoTabla table th{
+  /*background:#fff url(../../plugins/adeada/test/images/h100.png);*/
+  background:#F2F2F2;
+  color:#808080;
+}
+
+.resultadoEnviar{
+	height:400px;
+	width:800px;
+	overflow:auto;
+}
+
+#formEnvio table .par td{
+  background:#fff url(../../plugins/adeada/test/images/h100.png);
+  /*background:#fff;*/
+}
+#formEnvio table .impar td{
+  background:#f0fff0 url(../../plugins/adeada/test/images/h100.png);
+  /*background:#fff;*/
+}
+
+#formEnvio table tr .r_no{
+  background:#999 url(../../plugins/adeada/test/images/h100.png);
+}
+#formEnvio table tr .r_puntual{
+  background:#fcc url(../../plugins/adeada/test/images/h100.png);
+}
+#formEnvio table tr .r_sistematico{
+  background:#fdc url(../../plugins/adeada/test/images/h100.png);
+}
+#formEnvio table tr .r_documentado{
+  background:#fe9 url(../../plugins/adeada/test/images/h100.png);
+}
+#formEnvio table tr .r_revisado{
+  background:#ccf url(../../plugins/adeada/test/images/h100.png);
+}
+#formEnvio table tr .r_mejorado{
+  background:#cfc url(../../plugins/adeada/test/images/h100.png);
+}
+
+#seccion_inicio{
+  border:solid 1px #888;
+  padding:2px;
+}
+
+.titulo{
+  background:#ddd url(../../plugins/adeada/test/images/h100.png);
+  text-align:center;
+  font-size:1.4em;
+}
+
+.seccion{
+  padding:0;
+  /*background:#DEE6EF url(../../plugins/adeada/test/images/h800.png);*/
+  /*border: solid 1px #888; */ 
+}
+
+.paso, .paso0{
+  float:right;
+  background: #feb; 
+  padding:20px; 
+  border: solid 1px #888;   
+}
+
+.paso{
+  font-size:1.5em;  
+}
+
+.paso0{
+  width:500px;
+}
+
+.seccion dl dd input{
+  width:300px;
+}
+
+.icono{
+  background: #DEE6EF url(../../plugins/adeada/test/images/h100.png);
+  color: #fff;
+  border: solid 1px #888;
+}
+
+#wrapper #main #container #content .grupoAntSig{
+  float:right;
+  margin:2px 20px;  
+}
+#wrapper #main #container #content #capaEnviarTemp{
+  display:table-cell;
+  height:40px;
+}
+#wrapper #main #container #content .anterior{
+  /*position:absolute;*/
+  /*font-size:28pt;*/
+  /*right:200px;
+  top:10px;
+  background: #DEE6EF url(../../plugins/adeada/test/images/h100.png);
+  color: #fff;
+  border: solid 1px #888; */
+
+	display:table-cell;
+	float:left;
+	font-family:Arial;
+	font-size:9pt;	
+	font-weight:bold;	
+	color:#3B4E60;
+	line-height:30px;
+	/*width:39px;
+	height:36px;		
+	background: url(../../plugins/adeada/test/images/anterior.jpg);
+  
+	border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;			
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	*/   
+}
+
+#wrapper #main #container #content .siguiente{
+  /*position:absolute;*/
+  /*font-size:28pt;*/
+  /*right:120px;
+  top:10px; 
+  background: #DEE6EF url(../../plugins/adeada/test/images/h100.png);
+  color: #fff;
+  border: solid 1px #888; */ 
+
+	display:table-cell;
+	float:right;
+	font-family:Arial;
+	font-size:9pt;
+	font-weight:bold;	
+	color:#3B4E60;	
+	line-height:30px;
+	/*width:39px;
+	height:36px; 		
+	background: url(../../plugins/adeada/test/images/siguiente.jpg);
+	
+	border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;			
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	*/ 	
+  
+}
+
+#wrapper #main #container #content #enviarTemp{
+	vertical-align:middle;
+	text-align:center;
+	display:table-cell;	
+	margin: 0 auto;
+	width:80%;
+}
+
+#wrapper #main #container #content .enviar{
+  /*position:absolute;*/
+  /*font-size:28pt;*/
+  /*right:30px;
+  top:10px; 
+  background: #DEE6EF url(../../plugins/adeada/test/images/h100.png);
+  color: #fff;
+  border: solid 1px #888;   */
+
+
+
+	display:table-cell;
+	float:right;
+	font-family:Arial;
+	font-size:9pt;	
+	font-weight:bold;	
+	color:#3B4E60;
+	line-height:30px;
+	/*width:80px;
+	height:36px;				
+	background:#ccc url(../../plugins/adeada/test/images/salvar.jpg) no-repeat;
+   
+	border-top:solid 1px #aaa;	
+	border-left:solid 1px #aaa;	
+	border-right:solid 1px #555;	
+	border-bottom:solid 1px #555;			
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;	*/   
+}
+
+#wrapper #main #container #content .enviar:hover{
+	/*color:#99CC00;
+	background: #336699 url(../../plugins/adeada/test/images/salvar.jpg) no-repeat;*/
+}
+
+#wrapper #main #container #content .enviar:hover,#wrapper #main #container #content .siguiente:hover,#wrapper #main #container #content .anterior:hover{
+	/*color:#99CCFF;*/
+	text-decoration:underline;
+	/*color:#99CC00;
+	background: #003366 url(../../plugins/adeada/test/images/h100.png);*/
+}
+
+
+a.Ntooltip ,.Ntooltip2{
+position: relative; /* es la posición normal */
+text-decoration: none !important; /* forzar sin subrayado */
+color:#0080C0 !important; /* forzar color del texto */
+font-weight:bold !important; /* forzar negritas */
+}
+
+a.Ntooltip:hover {
+z-index:999; /* va a estar por encima de todo */
+background-color:#000000; /* DEBE haber un color de fondo */
+}
+
+a.Ntooltip span {
+display: none; /* el elemento va a estar oculto */
+}
+
+a.Ntooltip:hover span {
+display: block; /* se fuerza a mostrar el bloque */
+position: absolute; /* se fuerza a que se ubique en un lugar de la pantalla */
+top:2em; left:2em; /* donde va a estar */
+width:250px; /* el ancho por defecto que va a tener */
+padding:5px; /* la separación entre el contenido y los bordes */
+background-color: #90B0F0; /* el color de fondo por defecto */
+color: #FFFFFF; /* el color de los textos por defecto */
+}
+
+.Ntooltip2{
+  border:solid 0px #000;
+}
+
+.menuCuestionario{
+	margin-left:70px;
+	width:900px;
+	padding: 5px 5px;
+}
+
+#porcentajes{
+	margin-left:56px;
+}
+#titulares{
+	margin-left:0px;
+}
+#porcentajes input, #titulares div{
+	margin:0;
+	padding:0;
+	float:left;
+	border:0;
+	text-align:center;
+	font-size:0.7em;
+}
+#porcentajes .porcentajes1, #titulares .porcentajes1{
+	width:56px;
+	margin-left:30px;
+}
+#porcentajes .porcentajes2, #titulares .porcentajes2{
+	width:30px;
+}
+#titulares .porcentajes1, #titulares .porcentajes2{
+	display:table-cell;
+	float:left;
+}
+#titulares .titInicio{
+	width:56px;
+	display:table-cell;
+	float:left;
+}
+#botonera{
+	clear:both;
+}
+#botonera div{
+	margin:0;
+	padding:0;
+	display: table-cell;
+	font-size:24pt;
+	text-align:center;
+	vertical-align:middle;	
+}
+#botonera div:hover{
+	cursor:pointer;
+}
+#botonera div div{
+	/*padding-left:10px;*/
+}
+#botonera .bFlecha{
+	width:30px;
+	height:50px;	
+	background: url(../../plugins/adeada/test/images/flecha.gif);
+}
+#bInicio,#bEnviar,#bPersonas,#bEstrategia,#bRecursos,#bProcesos,#bResultados{
+	width:56px;
+	height:50px;
+}
+#bInicio_ico,#bEnviar_ico,#bPersonas_ico,#bEstrategia_ico,#bRecursos_ico,#bProcesos_ico,#bResultados_ico{
+	width:51px;
+	height:50px;
+	margin-right:5px;
+}
+#bPersonas,#bEstrategia,#bRecursos,#bProcesos,#bResultados{	
+	background: url(../../plugins/adeada/test/images/red_gris_claro.gif);
+}
+#bInicio,#bEnviar{	
+	background: url(../../plugins/adeada/test/images/cuad_gris_claro.gif);
+}
+#bEstF1,#bEstF2,#bPerF1,#bPerF2,#bRecF1,#bRecF2,#bProF1,#bProF2{
+	width:30px;
+	height:50px;
+	background: url(../../plugins/adeada/test/images/nodo_gris_claro.gif);
+}
+#bEstF1_ico,#bEstF2_ico,#bPerF1_ico,#bPerF2_ico,#bRecF1_ico,#bRecF2_ico,#bProF1_ico,#bProF2_ico{
+	width:30px;
+	height:50px;
+}
+
+.informe{
+	margin-top:20px;
+	height:340px;
+	overflow:auto;
+}
+.informe ul {
+	list-style-type:disc;
+	margin-left: 0;
+	padding-left: 30px;
+}
+.informe2{
+	margin-top:20px;
+	width:95%;
+	text-align:center;
+}
+.informe2 li{
+	display:inline;
+	padding:0 10px;
+}
+.informe3{
+	text-align:center;
+}
+.informe4{
+	margin-top:20px;
+	list-style-type:disc;
+	margin-left: 0;
+	padding-left: 30px;
+}
+.informe5{
+	list-style-type:disc;
+	margin-left: 0;
+	padding-left: 30px;
+}
+
+/*fin estilo*/
+
+

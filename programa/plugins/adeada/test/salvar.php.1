@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="wp-content/plugins/adeada/test/estilo.css" type="text/css"/>
+
+<?php
+
+
+function validar(){
+	global $strResultadoEnviarError;
+	$valido = true;	
+	if ($_POST["estado_cuestinario"] == "1"){
+		for ($i=1;$i<=43;$i++){
+			if ($_POST["resp_".$i] == 'NULL'){
+				$valido = false;
+				$strResultadoEnviarError = $strResultadoEnviarError."<br/>Falta de contestar la respuesta ".$i;
+			}	
+		}
+	}
+	return $valido;	
+}		
+
+function guardar(){
+    global $wpdb;
+    global $strResultadoEnviar;
+	global $strResultadoEnviarError;
+	$strResultadoEnviar = "";
+	$strResultadoEnviarError = "";
+	
+    $sql = "SET AUTOCOMMIT=0;";
+    $wpdb->query($sql); 
+    $sql = "BEGIN;";
+    $wpdb->query($sql); 
+	
+	$bActualizar = false;
+	if ($_POST['id_encuesta']!=null && $_POST['id_encuesta']!=""){
+		$get_id_encuesta = $_POST['id_encuesta'];
+		$bActualizar = true;
+	}
+	else{
+		$result = $wpdb->insert( 'adeada_encuestas', array( 'id_usuario' => get_current_user_id( ) ), array('%d') );
+		if($result !== false){
+			$get_id_encuesta = $wpdb->insert_id;
+		}
+	}
+
+	//si el cuestinario esta finalizado ponemos el estado de la encuesta a 1
+	if ($_POST["estado_cuestinario"] == "1"){
+		$sql = "update adeada_encuestas set estado = '1', fec_mod = current_timestamp()";
+		$sql .= " where id_encuesta = ".$get_id_encuesta;	
+		$result = $wpdb->query($sql); 
+		if ($result === false) {
+			$strResultadoEnviarError = $strResultadoEnviarError."<br/>Error actualizando el estado de la encuesta.";
+			return false;
+		}		
+	}	
+	
+	$sql = "SELECT id_pregunta, opciones, adeada_areas.nombre AS area,respuestaalfallo FROM adeada_preguntas INNER JOIN adeada_areas ON adeada_areas.id_area = adeada_preguntas.id_area ORDER BY id_pregunta";
+	$result = $wpdb->get_results($sql);
+	$aResp = array();
+	$aTipo = array();
+	$aRespFallo = array();
+	foreach ($result as $r) {
+		switch($r->opciones) {
+			case "0_10":
+				$aResp[$r->id_pregunta] = array(0=>"No",1=>"Puntual",2=>"Sistematico bajo",3=>"Sistematico alto",4=>"Documentado bajo",5=>"Documentado medio",6=>"Documentado alto",7=>"Revisado bajo",8=>"Revisado alto",9=>"Mejorado bajo",10=>"Mejorado alto");
+			break;						
+		}
+		$aTipo[$r->id_pregunta] = $r->area;
+		$aRespFallo[$r->id_pregunta] = $r->respuestaalfallo;
+	}
+	
+	$puntos = 0;
+	$puntosSec = 0;
+	$secc = "";
+	foreach ($_POST as $iden => $value) {
+		if (!preg_match("/^resp_([0-9]+)$/",$iden,$res)) continue;
+		$id_pregunta = $res[1];
+		if ($bActualizar){
+			$sql = "update adeada_respuestas set ";
+			$sql .= " puntos=".$value.",";
+			$sql .= " fec_mod=current_timestamp(),";
+			$sql .= " respuesta='".$aResp[$id_pregunta][$value]."'";
+			$sql .= " where id_encuesta = ".$get_id_encuesta." and id_pregunta=".$id_pregunta;			
+		}
+		else{
+			$sql = "insert into adeada_respuestas(id_encuesta,id_pregunta,puntos,fec_mod,respuesta) values(";
+			$sql .= "'".$get_id_encuesta."','".$id_pregunta."',".$value.",current_timestamp(),'".$aResp[$id_pregunta][$value]."')";
+		}
+		$result = $wpdb->query($sql); 
+		if ($result === false) {
+			$strResultadoEnviarError = $strResultadoEnviarError."<br/>Error guardando la encuesta.<br />Intentelo de nuevo.";
+			return false;
+		}
+		$puntos += $value;
+		if ($secc != $aTipo[$id_pregunta]){
+			if (strlen($secc)>0)
+				$strResultadoEnviar =  $strResultadoEnviar."<br/>puntos en ".$secc." ".$puntosSec;
+			$secc = $aTipo[$id_pregunta];
+			$puntosSec = 0;
+		}
+		if ($value < 5)
+			$strResultadoEnviar =  $strResultadoEnviar."<br/>RECUERDE: ".$aRespFallo[$id_pregunta];
+		$puntosSec += $value;
+	}
+	$strResultadoEnviar =  $strResultadoEnviar."<br/>puntos en ".$secc." ".$puntosSec;
+	
+	if($result !== false){
+		$sql = "COMMIT;";
+		$wpdb->query($sql); 
+	}
+	else{
+		$sql = "ROLLBACK;";
+		$wpdb->query($sql); 	
+	}
+		
+	$strResultadoEnviar =  $strResultadoEnviar."<br/>Encuesta guardada satisfactoriamente.<br /><em>(".$puntos." puntos)</em>";	
+	
+	$strAccion = "Continuar";
+	if ($_POST["estado_cuestinario"] == "1"){
+		$strAccion = "Ver resultado";
+		$strResultadoEnviar = "<a href='?page_id=8&id_encuesta=".$get_id_encuesta."'>".$strAccion."</a>".$strResultadoEnviar;
+	}
+	else{
+		$strResultadoEnviar = "No ha finalizado este autodiagn&oacute;stico, si desea ahora lo puede ";
+		$strResultadoEnviar = $strResultadoEnviar."<a href='?page_id=8&id_encuesta=".$get_id_encuesta."'>".$strAccion."</a>";
+	}		
+	
+	return true;
+}
+
+echo "<a href='?page_id=45'>Diagn&oacute;sticos</a>";
+echo "<div class='resultadoEnviar'>";
+if (validar()){
+    global $strResultadoEnviar;
+	global $strResultadoEnviarError;
+	if (guardar())
+		echo $strResultadoEnviar;
+	else
+		echo $strResultadoEnviarError;
+	
+}
+else{
+	global $strResultadoEnviarError;
+	echo $strResultadoEnviarError."<br/>No se ha guardado la encuesta.";	
+}	
+echo "</div>";
+		 
+        
+?>

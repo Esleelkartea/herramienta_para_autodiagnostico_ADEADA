@@ -1,0 +1,48 @@
+<?php if ( is_sidebar_active('primary_widget_area') ) : ?>
+        <div id="primary" class="widget-area">
+			<?php include('acciones.php');?>
+			<a href="#">login</a>
+			<a href="#">registrar</a>
+			<a id="wp-logout" href="<?php echo wp_logout_url(get_permalink()) ?>"><?php echo __( 'Log Out' ) ?></a><br />
+			<?php 
+			$str = "redirect=http://".$_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+			wp_login_form($str);
+			?>
+			<form name="entrarform" id="entrarform" action="http://<?php echo $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] ?>" method="post">
+				<p>
+					<label><?php _e('Username') ?><br />
+					<input type="text" name="log" id="log" class="input" size="20" tabindex="10" /></label>
+				</p>
+				<p>
+					<label><?php echo _e('Password') ?><br />
+					<input type="text" name="pwd" id="pwd" class="input" size="25" tabindex="20" /></label>
+				</p>				
+				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="<?php esc_attr_e('Log In'); ?>" tabindex="100" /></p>
+				<input name="recordarUsuario" type="checkbox" id="recordarUsuario" value="forever" /> <label><?php _e( 'Remember Me' ) ?></label>
+				<input type="hidden" name="accion" value="entrar" />
+			</form>			
+
+			<form name="registrarform" id="registrarform" action="http://<?php echo $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] ?>" method="post">
+				<p>
+					<label><?php _e('Username') ?><br />
+					<input type="text" name="nombreRegistro" id="nombreRegistro" class="input" size="20" tabindex="10" /></label>
+				</p>
+				<p>
+					<label><?php _e('E-mail') ?><br />
+					<input type="text" name="loginRegistro" id="loginRegistro" class="input" size="25" tabindex="20" /></label>
+				</p>
+				<p>
+					<label><?php echo _e('Password') ?><br />
+					<input type="text" name="passRegistro" id="passRegistro" class="input" size="25" tabindex="20" /></label>
+				</p>				
+				<p id="reg_passmail"><?php _e('A password will be e-mailed to you.') ?></p>
+				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="<?php esc_attr_e('Register'); ?>" tabindex="100" /></p>
+				<input type="hidden" name="accion" value="registrar" />
+			</form>
+			
+			
+            <ul class="xoxo">
+                <?php dynamic_sidebar('primary_widget_area'); ?>
+            </ul>
+        </div><!-- #primary .widget-area -->
+<?php endif; ?>      

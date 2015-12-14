@@ -1,0 +1,213 @@
+<link rel="stylesheet" href="wp-content/plugins/adeada/test/estilo.css" type="text/css"/>
+
+<?php
+
+
+function validar(){
+	global $strResultadoEnviarError;
+	$valido = true;	
+	if ($_POST["estado_cuestinario"] == "1"){
+		for ($i=1;$i<=43;$i++){
+			if ($_POST["resp_".$i] == 'NULL'){
+				$valido = false;
+				$strResultadoEnviarError = $strResultadoEnviarError."<br/>Falta de contestar la respuesta ".$i;
+			}	
+		}
+	}
+	return $valido;	
+}		
+
+function guardar(){
+    global $wpdb;
+    global $strResultadoEnviar;
+	global $strResultadoEnviarError;
+	$strTabla = "";
+	$strResultadoEnviar = "";
+	$strResultadoEnviarError = "";
+	//$arrPuntosPonderados = array(2.2,0.367,0.367,0.367,0.367,0.367,0.367,0.734,0.734,0.734,0.55,0.55,0.55,0.55,1.1,1.1,0.55,0.55,0.55,0.55,0.734,0.734,0.734,0.734,0.734,0.734,0.55,0.55,0.55,0.55,1.1,1.1,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,4.5,4.5,4.5);
+	
+    $sql = "SET AUTOCOMMIT=0;";
+    $wpdb->query($sql); 
+    $sql = "BEGIN;";
+    $wpdb->query($sql); 
+	
+	$bActualizar = false;
+	if ($_POST['id_encuesta']!=null && $_POST['id_encuesta']!=""){
+		$get_id_encuesta = $_POST['id_encuesta'];
+		$bActualizar = true;
+	}
+	else{
+		$result = $wpdb->insert( 'adeada_encuestas', array( 'id_usuario' => get_current_user_id( ) ), array('%d') );
+		if($result !== false){
+			$get_id_encuesta = $wpdb->insert_id;
+		}
+		else{
+			$sql = "ROLLBACK;";
+			$wpdb->query($sql); 		
+			$strResultadoEnviarError = $strResultadoEnviarError."<br/>Error al incluir una encuesta.";
+			return false;		
+		}
+	}
+
+	//si el cuestinario esta finalizado ponemos el estado de la encuesta a 1
+	if ($_POST["estado_cuestinario"] == "1"){
+		$sql = "update adeada_encuestas set estado = '1', fec_mod = current_timestamp()";
+		$sql .= " where id_encuesta = ".$get_id_encuesta;	
+		$result = $wpdb->query($sql); 
+		if ($result === false) {
+			$sql = "ROLLBACK;";
+			$wpdb->query($sql); 			
+			$strResultadoEnviarError = $strResultadoEnviarError."<br/>Error actualizando el estado de la encuesta.";
+			return false;
+		}		
+	}	
+	
+	//$sql = "SELECT id_pregunta, opciones, adeada_areas.nombre AS area,respuestaalfallo FROM adeada_preguntas INNER JOIN adeada_areas ON adeada_areas.id_area = adeada_preguntas.id_area ORDER BY id_pregunta";
+	$sql = "SELECT id_pregunta, opciones, adeada_areas.nombre AS area,peso FROM adeada_preguntas INNER JOIN adeada_areas ON adeada_areas.id_area = adeada_preguntas.id_area ORDER BY id_pregunta";
+	$result = $wpdb->get_results($sql);
+	$aResp = array();
+	$aTipo = array();
+	//$aRespFallo = array();
+	$aPeso = array();
+	foreach ($result as $r) {
+		switch($r->opciones) {
+			case "0_10":
+				$aResp[$r->id_pregunta] = array(0=>"No",1=>"Puntual",2=>"Sistematico bajo",3=>"Sistematico alto",4=>"Documentado bajo",5=>"Documentado medio",6=>"Documentado alto",7=>"Revisado bajo",8=>"Revisado alto",9=>"Mejorado bajo",10=>"Mejorado alto");
+			break;						
+		}
+		$aTipo[$r->id_pregunta] = $r->area;
+		//$aRespFallo[$r->id_pregunta] = $r->respuestaalfallo;
+		$aPeso[$r->id_pregunta] = $r->peso;
+	}
+	
+	$puntos = 0;
+	$puntosSec = 0;
+	$secc = "";
+	foreach ($_POST as $iden => $value) {
+		if (!preg_match("/^resp_([0-9]+)$/",$iden,$res)) continue;
+		$id_pregunta = $res[1];
+		if ($bActualizar){
+			$sql = "update adeada_respuestas set ";
+			$sql .= " puntos=".$value.",";
+			$sql .= " fec_mod=current_timestamp(),";
+			$sql .= " respuesta='".$aResp[$id_pregunta][$value]."'";
+			$sql .= " where id_encuesta = ".$get_id_encuesta." and id_pregunta=".$id_pregunta;			
+		}
+		else{
+			$sql = "insert into adeada_respuestas(id_encuesta,id_pregunta,puntos,fec_mod,respuesta) values(";
+			$sql .= "'".$get_id_encuesta."','".$id_pregunta."',".$value.",current_timestamp(),'".$aResp[$id_pregunta][$value]."')";
+		}
+		$result = $wpdb->query($sql); 
+		if ($result === false) {
+			$sql = "ROLLBACK;";
+			$wpdb->query($sql); 		
+			$strResultadoEnviarError = $strResultadoEnviarError."<br/>Error guardando la encuesta.<br />Intentelo de nuevo.";
+			return false;
+		}
+		//$puntos += $value;
+		//if ($secc != $aTipo[$id_pregunta]){
+		//	if (strlen($secc)>0)
+		//		$strResultadoEnviar =  $strResultadoEnviar."<br/>puntos en ".$secc." ".$puntosSec;
+		//	$secc = $aTipo[$id_pregunta];
+		//	$puntosSec = 0;
+		//}
+		//if ($value < 5)
+		//	$strResultadoEnviar =  $strResultadoEnviar."<br/>RECUERDE: ".$aRespFallo[$id_pregunta];
+		//$puntosSec += $value;
+		
+		switch ($id_pregunta) {
+			case 11:
+				$strTabla =  $strTabla."<td>".round($puntosSec)."</td>";
+				$puntosSec = 0;
+				break;
+			case 21:
+				$strTabla =  $strTabla."<td>".round($puntosSec)."</td>";
+				$puntosSec = 0;
+				break;
+			case 31:
+				$strTabla =  $strTabla."<td>".round($puntosSec)."</td>";
+				$puntosSec = 0;
+				break;
+			case 41:
+				$strTabla =  $strTabla."<td>".round($puntosSec)."</td>";
+				$puntosSec = 0;
+				break;				
+			default:
+			break;
+		}
+		$puntos += $value*$aPeso[$id_pregunta];
+		$puntosSec += $value*$aPeso[$id_pregunta];
+	}
+	
+	$strTabla =  $strTabla."<td>".round($puntosSec)."</td>";
+	$strTabla =  $strTabla."<td>".round($puntos)."</td>";
+	$strTabla =  "<table><tr><th>Estrategia</th><th>Personas</th><th>Recursos</th><th>Procesos</th><th>Resultados</th><th>Total</th></tr><tr>".$strTabla."</tr></table>";
+	
+	if($result !== false){
+		$sql = "COMMIT;";
+		$wpdb->query($sql); 
+	}
+	else{
+		$sql = "ROLLBACK;";
+		$wpdb->query($sql); 	
+	}
+			
+	$strAccion = "Continuar";
+	if ($_POST["estado_cuestinario"] == "1"){
+		$strAccion = "Revisar el diagn&oacute;stico";
+		$strElem = "<ul class='informe2'>";
+		$strElem = $strElem."<li><a href='?page_id=8&id_encuesta=".$get_id_encuesta."'>".$strAccion."</a></li>";
+		$strElem = $strElem."<li><a href='?page_id=118&id_encuesta=".$get_id_encuesta."'>Puntuaci&oacute;n</a></li>";
+		$strElem = $strElem."<li><a href='?page_id=120&id_encuesta=".$get_id_encuesta."'>Mejoras</a></li>";
+		$strElem = $strElem."<li><a href='?page_id=122&id_encuesta=".$get_id_encuesta."'>Puntos Fuertes</a></li>";
+		$strElem = $strElem."</ul>";
+		$strDiag = "";
+		if ($puntos < 100){
+			$strDiag =  $strDiag."<blockquote>Su empresa est&aacute; realizando la reflexi&oacute;n estrat&eacute;gica inicial en materia de gesti&oacute;n excelente. Probablemente usted ha descubierto muchos puntos en los que hasta ahora no ha reparado o no los ha tenido en cuenta en la gesti&oacute;n. Tome nota de todas esas cuestiones, analice sus puntos fuertes y sus &aacute;reas de mejora y comience el camino hacia la gesti&oacute;n excelente. Eso le costar&aacute; un esfuerzo y una dedicaci&oacute;n, pero merece la pena.</blockquote>";
+		}
+		if (($puntos >= 100) && ($puntos < 200)){
+			$strDiag =  $strDiag."<br/><br/><div class='informe3'><img src='wp-content/plugins/adeada/test/images/bronce.jpg'/><br/>Su empresa ha alcanzado un <strong>Nivel B&aacute;sico: Iniciaci&oacute;n a la Excelencia</strong></div>";
+			$strDiag =  $strDiag."<blockquote>&iexcl;Enhorabuena! Su empresa tiene las bases para avanzar con firmeza por la senda de la excelencia. Probablemente usted ha descubierto algunos puntos en los que hasta ahora no ha reparado o no los ha tenido en cuenta en la gesti&oacute;n. Analice sus puntos fuertes y sus &aacute;reas de mejora y siga avanzando en su proceso de mejora continua con el objetivo de llegar al Nivel Medio: 'Taller Excelente'. Eso le costar&aacute; un esfuerzo y una dedicaci&oacute;n, pero merece la pena.</blockquote>";
+		}	
+		if (($puntos >= 200) && ($puntos < 300)){
+			$strDiag =  $strDiag."<br/><br/><div class='informe3'><img src='wp-content/plugins/adeada/test/images/plata.jpg'/><br/>Su empresa ha alcanzado un <strong>Nivel Medio: Taller Excelente</strong></div>";
+			$strDiag =  $strDiag."<blockquote>&iexcl;Enhorabuena! Su empresa es un 'Taller Excelente'. Aunque no haya utilizado hasta ahora la metodolog&iacute;a EFQM, usted conoce perfectamente las &aacute;reas de gesti&oacute;n de su negocio, dispone de procedimientos y m&eacute;todos de trabajo debidamente documentados y, como consecuencia, ha obtenido resultados positivos econ&oacute;micos, de atenci&oacute;n al cliente y de personas, mantenidos en el tiempo. Las &aacute;reas de mejora le dar&aacute;n la pista para avanzar en el camino de la mejora continua</blockquote>";
+		}	
+		if ($puntos >= 300){
+			$strDiag =  $strDiag."<br/><br/><div class='informe3'><img src='wp-content/plugins/adeada/test/images/oro.jpg'/><br/>Su empresa ha alcanzado un <strong>Nivel Superior: Taller Excelente Premium</strong></div>";					
+			$strDiag =  $strDiag."<blockquote>&iexcl;Enhorabuena! Pocos talleres han alcanzado este nivel. Usted conoce perfectamente perfectamente las &aacute;reas de gesti&oacute;n de su negocio, dispone de procedimientos y m&eacute;todos de trabajo debidamente documentados y, como consecuencia, ha obtenido resultados positivos econ&oacute;micos, de atenci&oacute;n al cliente y de personas, mantenidos en el tiempo. Su pr&oacute;ximo paso ser&iacute;a implantar EFQM en su empresa. </blockquote>";
+		}	
+		
+		$strOK =  "<br/>Encuesta guardada satisfactoriamente.<br /><em>(".round($puntos)." puntos)</em>";	
+		$strResultadoEnviar = $strElem.$strTabla.$strOK.$strDiag;
+	}
+	else{
+		$strElem = "<ul class='informe4'>";
+		$strElem = $strElem."<li>No ha finalizado este autodiagn&oacute;stico, si desea ahora lo puede <a href='?page_id=8&id_encuesta=".$get_id_encuesta."'>".$strAccion."</a></li>";
+		$strElem = $strElem."<li>Volver al listado de sus <a href='?page_id=45'>Diagn&oacute;sticos</a></li>";		
+		$strElem = $strElem."</ul>";		
+		$strResultadoEnviar = $strElem;
+
+	}		
+	
+	return true;
+}
+
+echo "<div class='resultadoEnviar'>";
+if (validar()){
+    global $strResultadoEnviar;
+	global $strResultadoEnviarError;
+	if (guardar())
+		echo $strResultadoEnviar;
+	else
+		echo $strResultadoEnviarError;
+	
+}
+else{
+	global $strResultadoEnviarError;
+	echo $strResultadoEnviarError."<br/>No se ha guardado la encuesta.";	
+}	
+echo "</div>";
+		 
+        
+?>
